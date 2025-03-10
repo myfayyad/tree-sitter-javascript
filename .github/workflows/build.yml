@@ -1,0 +1,29 @@
+name: Build tree-sitter-javascript DLL
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install Dependencies
+        run: |
+          choco install cmake ninja --force
+          RefreshEnv
+
+      - name: Build DLL
+        run: |
+          mkdir build
+          cd build
+          cmake .. -G "Ninja"
+          ninja
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: tree-sitter-javascript-dll
+          path: build/tree-sitter-javascript.dll
