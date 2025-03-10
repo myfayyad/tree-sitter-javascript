@@ -12,8 +12,12 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          choco install cmake ninja --force
+          choco install cmake ninja llvm --force
           RefreshEnv
+
+      - name: Clone tree-sitter core
+        run: |
+          git clone --depth 1 https://github.com/tree-sitter/tree-sitter.git ../tree-sitter
 
       - name: Build DLL
         run: |
@@ -23,7 +27,7 @@ jobs:
           ninja
 
       - name: Upload Build Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4  # ✅ Fixed deprecated version
         with:
           name: tree-sitter-javascript-dll
           path: build/tree-sitter-javascript.dll
